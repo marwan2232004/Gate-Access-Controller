@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from router import router as plate_router
+from app.router import router as plate_router
 
 app = FastAPI()
 
