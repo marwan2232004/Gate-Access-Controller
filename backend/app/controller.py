@@ -1,5 +1,12 @@
 from sqlalchemy.orm import Session
 from app.models import Plate
+import sys, os
+import numpy as np
+import cv2
+sys.path.append(os.path.abspath('../'))
+from inference.inference import get_car_plate_characters
+from utils.utils import show_images
+sys.path.append(os.path.abspath('../backend'))
 
 def plate_exists(db: Session, plate_number: str) -> bool:
     return db.query(Plate).filter(Plate.plate_number == plate_number).first() is not None
@@ -23,26 +30,11 @@ def remove_plate(db: Session, plate_number: str):
 def is_allowed(db: Session, image):
     image_data = image.file.read()
 
-    # TODO: Call the actual plate detection function here
-    # plate_number = detect_plate(image_data) 
-    plate_number = "ABC1234" # Replace with the above line
-    
-    # FOR TESTING PURPOSES
-    #----------------------------------------------
-    #----------------------------------------------
-    
-    # save_dir = os.path.join(os.getcwd(), "uploaded_images")
-    # os.makedirs(save_dir, exist_ok=True)
-    # timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    # file_extension = image.filename.split(".")[-1]
-    # saved_path = os.path.join(save_dir, f"{timestamp}_{plate_number}.{file_extension}")
-    # print(saved_path)
-    
-    # with open(saved_path, "wb") as file:
-    #     file.write(image_data)
-    
-    #----------------------------------------------
-    #----------------------------------------------
+    image_array = np.frombuffer(image_data, np.uint8)
+    image_cv = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+    image = cv2.cvtColor(image_cv, cv2.COLOR_BGR2RGB)
+
+    plate_number = get_car_plate_characters(image_path=None, image=image)
 
     exists = plate_exists(db, plate_number)
     return {"allowed": exists, "plate": plate_number}

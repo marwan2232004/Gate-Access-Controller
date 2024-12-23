@@ -11,7 +11,7 @@ class TestIsAllowed(TestCase):
         self.db = next(get_db())
 
     def test_is_allowed(self):
-        test_image = "robot-and-human.jpg"
+        test_image = "Cars0.png"
         test_image_path = os.path.join(os.path.dirname(__file__), test_image)
         
         if not os.path.exists(test_image_path):
