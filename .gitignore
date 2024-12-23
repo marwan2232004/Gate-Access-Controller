@@ -32,6 +32,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+dataset/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -169,3 +170,10 @@ cython_debug/
 .idea/
 
 data/
+
+*.xml
+*.png
+*.jpg
+notebooks/car-plate-detection
+notebooks/characters-and-digits-for-classification
+models/yolo_fine_tuned.pt

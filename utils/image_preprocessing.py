@@ -113,6 +113,19 @@ def convert_to_binary(image, block_size=31, constant=2):
     return binary_image_adaptive
 
 
+def apply_morphological_operations(image, kernel_size=3):
+    structuring_element = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size))
+
+    # Apply morphological operations
+    img_top_hat = cv2.morphologyEx(image, cv2.MORPH_TOPHAT, structuring_element)
+    img_black_hat = cv2.morphologyEx(image, cv2.MORPH_BLACKHAT, structuring_element)
+
+    img_grayscale_plus_top_hat = cv2.add(image, img_top_hat)
+    image = cv2.subtract(img_grayscale_plus_top_hat, img_black_hat)
+
+    return image
+
+
 def preprocess_image(image_path, image=None):
     # load image
     if image is None:
@@ -126,14 +139,7 @@ def preprocess_image(image_path, image=None):
     # apply bilateral filter
     gray_filter = cv2.bilateralFilter(gray_scale_image, 13, 15, 15)
 
-    structuring_element = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-
-    # Apply morphological operations
-    img_top_hat = cv2.morphologyEx(gray_filter, cv2.MORPH_TOPHAT, structuring_element)
-    img_black_hat = cv2.morphologyEx(gray_filter, cv2.MORPH_BLACKHAT, structuring_element)
-
-    img_grayscale_plus_top_hat = cv2.add(gray_filter, img_top_hat)
-    gray_filter = cv2.subtract(img_grayscale_plus_top_hat, img_black_hat)
+    gray_filter = apply_morphological_operations(gray_filter)
 
     binary_image_adaptive = cv2.adaptiveThreshold(
         gray_filter, 255,
@@ -323,5 +329,11 @@ def get_chars_from_contours(contour, image):
     x, y, w, h = contour
     char = image[y:y + h, x:x + w]
     char = cv2.resize(char, (28, 28))
-
-    return preprocess_image(None, char)
+    char = apply_morphological_operations(char)
+    binary_image_adaptive = cv2.adaptiveThreshold(
+        char, 255,
+        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv2.THRESH_BINARY_INV,
+        31,
+        5)
+    return binary_image_adaptive
