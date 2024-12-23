@@ -1,10 +1,27 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 const MediaUploader = ({ image, setImage, setLoading }) => {
   const uploadMedia = () => {
     console.log("Uploading media...");
     setLoading(true);
+    // Simulate a backend call
+
+    setTimeout(() => {
+      const isSuccess = false; // Randomize success or failure
+      setLoading(false);
+
+      if (isSuccess) {
+        toast.success("Welcome, You're allowed to access.", {
+          position: "bottom-right",
+        });
+      } else {
+        toast.error("I'm sorry, You can't access.", {
+          position: "bottom-right",
+        });
+      }
+    }, 2000); // Simulate a 2-second delay
   };
   return (
     <div className="w-[400px] h-[400px] max-w-lg mx-auto relative">

@@ -3,6 +3,8 @@ import { useState } from "react";
 import MediaHandler from "./components/MediaHandler";
 import NavBar from "./components/NavBar";
 import { PulseLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const [loading, setLoading] = useState(false);
   return (
@@ -15,6 +17,7 @@ function App() {
             <PulseLoader color={"#ffffff"} loading={loading} size={30} />
           </div>
         )}
+        <ToastContainer />
       </div>
     </div>
   );
