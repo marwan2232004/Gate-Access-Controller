@@ -18,9 +18,9 @@ def extract_features(dataset_images):
     return features
 
 
-def get_car_plate_characters(image_path):
+def get_car_plate_characters(image_path, image=None):
     # Step 1: Preprocess the image
-    preprocessed_image = preprocess_image(image_path=image_path)
+    preprocessed_image = preprocess_image(image_path=image_path, image=image)
 
     # Step 2: Detect the license plate characters
     best_groups = find_plate_chars(preprocessed_image)
@@ -33,7 +33,7 @@ def get_car_plate_characters(image_path):
             chars.append(char)
 
     # Step 4: Load the model
-    model = joblib.load("models/OCR_SVM.pkl")
+    model = joblib.load("../models/OCR_SVM.pkl")
 
     # Step 5: Predict the characters
     predictions = ""
