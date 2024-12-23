@@ -35,7 +35,7 @@ def get_car_plate_characters(image_path, image=None):
             chars.append(char)
 
     # Step 4: Load the model
-    model = joblib.load("../models/OCR_SVM.pkl")
+    model = joblib.load("models/OCR_SVM.pkl")
 
     # Step 5: Predict the characters
     predictions = ""
