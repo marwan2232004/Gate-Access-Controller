@@ -1,31 +1,22 @@
 import os
 
-from utils.image_preprocessing import preprocess_image
+import cv2
+
+from inference.inference import get_car_plate_characters
+from utils.utils import show_images
 
 IMAGES_DIR = os.path.join("data", "car-plate-detection", "images")
 ANNOTATIONS_DIR = os.path.join("data", "car-plate-detection", "annotations")
 IMAGE_WIDTH = 300
 IMAGE_HEIGHT = 200
 
-
-def main(image_name):
-    # Step 1: Preprocess the image
-    preprocessed_img = preprocess_image(image_name=image_name,
-                                        image_dir=IMAGES_DIR,
-                                        annotation_dir=ANNOTATIONS_DIR,
-                                        adaptive_threshold_block_size=31,
-                                        resized_width=IMAGE_WIDTH,
-                                        resized_height=IMAGE_HEIGHT)
-
-    # Step 2: Detect the license plate
-
-    # Step 3: Segment characters
-
-    # Step 4: Recognize characters
-
-    # Step 5: Access Control
-
-
 if __name__ == "__main__":
     sample_image_name = "Cars0.png"
-    main(sample_image_name)
+    image_path = os.path.join(IMAGES_DIR, sample_image_name)
+
+    image = cv2.imread(image_path)
+    original_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    predictions = get_car_plate_characters(image_path=image_path)
+    # display the image
+    show_images([original_image], [f"Car Plate Number: {predictions}"])
