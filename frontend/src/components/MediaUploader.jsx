@@ -7,18 +7,24 @@ const MediaUploader = ({ image, setImage, setLoading }) => {
     console.log("Uploading media...");
     setLoading(true);
     try {
+      const formData = new FormData();
+      formData.append("image", image);
       fetch("http://localhost:8000/is-allowed", {
         method: "POST",
-        body: new FormData().append("image", image),
+        body: formData,
       })
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          // if (data.success) {
-          //   toast.success("Media uploaded successfully!");
-          // } else {
-          //   toast.error("Failed to upload media!");
-          // }
+          if (data.allowed) {
+            toast.success(
+              `Welcome ${data.plate},You're allowed to access Gateway!`
+            );
+          } else {
+            toast.error(
+              `I'm sorry, ${data.plate} isn't allowed to access Gateway!`
+            );
+          }
         });
     } catch (err) {
       console.log(err);

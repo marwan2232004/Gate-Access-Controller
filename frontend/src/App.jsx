@@ -17,7 +17,7 @@ function App() {
             <PulseLoader color={"#ffffff"} loading={loading} size={30} />
           </div>
         )}
-        <ToastContainer />
+        <ToastContainer position="bottom-right" />
       </div>
     </div>
   );
