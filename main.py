@@ -5,8 +5,7 @@ import cv2
 from inference.inference import get_car_plate_characters, get_car_plate_characters_yolo
 from utils.utils import show_images
 
-IMAGES_DIR = os.path.join("data", "car-plate-detection", "images")
-ANNOTATIONS_DIR = os.path.join("data", "car-plate-detection", "annotations")
+IMAGES_DIR = os.path.join("dataset", "images")
 IMAGE_WIDTH = 300
 IMAGE_HEIGHT = 200
 
