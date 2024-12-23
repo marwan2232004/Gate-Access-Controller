@@ -6,22 +6,26 @@ const MediaUploader = ({ image, setImage, setLoading }) => {
   const uploadMedia = () => {
     console.log("Uploading media...");
     setLoading(true);
-    // Simulate a backend call
-
-    setTimeout(() => {
-      const isSuccess = false; // Randomize success or failure
+    try {
+      fetch("http://localhost:8000/is-allowed", {
+        method: "POST",
+        body: new FormData().append("image", image),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          // if (data.success) {
+          //   toast.success("Media uploaded successfully!");
+          // } else {
+          //   toast.error("Failed to upload media!");
+          // }
+        });
+    } catch (err) {
+      console.log(err);
+    } finally {
       setLoading(false);
-
-      if (isSuccess) {
-        toast.success("Welcome, You're allowed to access.", {
-          position: "bottom-right",
-        });
-      } else {
-        toast.error("I'm sorry, You can't access.", {
-          position: "bottom-right",
-        });
-      }
-    }, 2000); // Simulate a 2-second delay
+      setImage(null);
+    }
   };
   return (
     <div className="w-[400px] h-[400px] max-w-lg mx-auto relative">
@@ -35,7 +39,7 @@ const MediaUploader = ({ image, setImage, setLoading }) => {
         <img
           src={URL.createObjectURL(image)}
           alt="uploaded"
-          className="rounded-lg w-full h-full object-cover"
+          className="rounded-lg w-full h-full object-fill"
         />
         <div
           className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:cursor-pointer"
