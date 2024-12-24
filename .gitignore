@@ -177,3 +177,4 @@ data/
 notebooks/car-plate-detection
 notebooks/characters-and-digits-for-classification
 models/yolo_fine_tuned.pt
+path.txt
