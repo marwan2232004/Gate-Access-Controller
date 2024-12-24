@@ -1,3 +1,5 @@
+import re
+
 import cv2
 import joblib
 import numpy as np
@@ -5,6 +7,7 @@ import pytesseract
 from ultralytics import YOLO
 
 from utils.image_preprocessing import preprocess_image, find_plate_chars, get_chars_from_contours
+from utils.utils import show_images
 
 
 # Now you can resize each image in the dataset
@@ -48,8 +51,8 @@ def get_car_plate_characters(image_path, image=None):
 
 def get_car_plate_characters_yolo(image_path):
     best = YOLO(model="models/yolo_fine_tuned.pt")
-    results = best.predict(conf=0.25, source=image_path)
-    image = cv2.imread(image_path)
+    results = best.predict(conf=0.25, source=image_path, save=True)
+    image = cv2.imread(image_path, cv2.COLOR_BGR2RGB)
     predictions = []
     for result in results:
         for box in result.boxes.xyxy:
@@ -61,12 +64,12 @@ def get_car_plate_characters_yolo(image_path):
             # Ensure the cropped image is C-contiguous
             cropped_img = np.ascontiguousarray(cropped_img)
 
-            # Save the cropped image temporarily
-            temp_path = f"./car_plate"
-            cv2.imwrite(temp_path, cv2.cvtColor(cropped_img, cv2.COLOR_RGB2BGR))
+            show_images([cropped_img], [f"Cropped Yolo Image"])
 
             pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
             text = pytesseract.image_to_string(cropped_img, config='--psm 7')
-            predictions.append(text.strip())
+
+            predictions.append(re.sub(r'\W+', '', text.strip()))
 
     return predictions

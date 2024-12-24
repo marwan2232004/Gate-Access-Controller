@@ -8,3 +8,5 @@ joblib~=1.4.2
 scikit-learn==1.6.0
 fastapi~=0.115.0
 python-dotenv~=1.0.1
+pytesseract~=0.3.13
+ultralytics~=8.3.53
